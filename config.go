@@ -27,6 +27,7 @@ import (
 type BurrowConfig struct {
 	General struct {
 		LogDir         string `gcfg:"logdir"`
+		PIDDir         string `gcfg:"piddir"`
 		LogConfig      string `gcfg:"logconfig"`
 		PIDFile        string `gcfg:"pidfile"`
 		ClientID       string `gcfg:"client-id"`
@@ -122,6 +123,9 @@ func ValidateConfig(app *ApplicationContext) error {
 		if _, err := os.Stat(app.Config.General.LogConfig); os.IsNotExist(err) {
 			errs = append(errs, "Log configuration file does not exist")
 		}
+	}
+	if app.Config.General.PIDDir == "" {
+		app.Config.General.PIDDir = app.Config.General.LogDir
 	}
 	if app.Config.General.PIDFile == "" {
 		app.Config.General.PIDFile = "burrow.pid"
